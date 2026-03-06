@@ -4,16 +4,14 @@ require("dotenv").config();
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: "20mb" })); // images can be large
+app.use(express.json({ limit: "20mb" }));
 
 const API_KEY = process.env.ANTHROPIC_API_KEY;
 
-// Health check
 app.get("/", (req, res) => {
   res.json({ status: "HealthQuest API running" });
 });
 
-// Proxy to Anthropic
 app.post("/api/claude", async (req, res) => {
   if (!API_KEY) {
     return res.status(500).json({ error: "ANTHROPIC_API_KEY not set on server" });
@@ -27,7 +25,7 @@ app.post("/api/claude", async (req, res) => {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: req.body.model || "claude-sonnet-4-20250514",
+        model: req.body.model || "claude-sonnet-4-5",
         max_tokens: req.body.max_tokens || 2500,
         system: req.body.system,
         messages: req.body.messages,
